@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { format, getDaysInMonth, startOfMonth, addDays } from 'date-fns';
 import { Holiday } from '../services/holidayService';
 import { getHolidaysForDate, hasWorkHoliday } from '../hooks/useCalendar';
 import '../styles/Calendar.css';
+import Tooltip from './Tooltip';
 
 interface CalendarProps {
   month: Date;
@@ -42,6 +43,11 @@ const Calendar: React.FC<CalendarProps> = ({ month, holidays }) => {
     weeks.push(days.slice(i, i + 7));
   }
 
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipX, setTooltipX] = useState(0);
+  const [tooltipY, setTooltipY] = useState(0);
+  const [tooltipContent, setTooltipContent] = useState<React.ReactNode | null>(null);
+
   return (
     <div className="calendar">
       <h2>{format(month, 'MMMM yyyy')}</h2>
@@ -70,18 +76,48 @@ const Calendar: React.FC<CalendarProps> = ({ month, holidays }) => {
                   const dayHolidays = getHolidaysForDate(holidays, date);
                   const isToday = isCurrentMonth && day === today.getDate();
                   const hasWork = hasWorkHoliday(dayHolidays);
-                  const hasMultiple = dayHolidays.length > 1;
 
-                  // Build tooltip: prefer listing work-holiday names when present
+                  // Build tooltip content: prefer listing work-holiday names when present
                   const workHolidays = dayHolidays.filter((h) => h.type === 'WORK');
-                  const workNames = workHolidays.map((h) => h.name).join(', ');
-                  const allNames = dayHolidays.map((h) => h.name).join(', ');
-                  const tooltipText = workHolidays.length > 0 ? workNames : (dayHolidays.length > 0 ? allNames : undefined);
+                  const workNames = workHolidays.map((h) => h.name);
+                  const allNames = dayHolidays.map((h) => h.name);
+                  const hasTooltip = workHolidays.length > 0 || dayHolidays.length > 0;
+
+                  const handleMouseEnter = (e: React.MouseEvent) => {
+                    if (!hasTooltip) return;
+                    const clientX = (e.nativeEvent as MouseEvent).clientX;
+                    const clientY = (e.nativeEvent as MouseEvent).clientY;
+                    setTooltipX(clientX);
+                    setTooltipY(clientY);
+                    setTooltipVisible(true);
+                    setTooltipContent(
+                      <div>
+                        {workHolidays.length > 0 ? <div className="title">Work Holidays</div> : <div className="title">Holidays</div>}
+                        {(workHolidays.length > 0 ? workNames : allNames).map((n, idx) => (
+                          <div key={idx} className="item">{n}</div>
+                        ))}
+                      </div>
+                    );
+                  };
+
+                  const handleMouseMove = (e: React.MouseEvent) => {
+                    const clientX = (e.nativeEvent as MouseEvent).clientX;
+                    const clientY = (e.nativeEvent as MouseEvent).clientY;
+                    setTooltipX(clientX);
+                    setTooltipY(clientY);
+                  };
+
+                  const handleMouseLeave = () => {
+                    setTooltipVisible(false);
+                    setTooltipContent(null);
+                  };
 
                   return (
                     <td
                       key={dayIndex}
-                      title={tooltipText}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseMove={handleMouseMove}
+                      onMouseLeave={handleMouseLeave}
                       className={`day ${isToday ? 'today' : ''} ${dayHolidays.length > 0 ? 'holiday' : ''} ${
                         hasWork ? 'work-holiday' : ''
                       }`}
@@ -90,11 +126,9 @@ const Calendar: React.FC<CalendarProps> = ({ month, holidays }) => {
                       {dayHolidays.length > 0 && (
                         <div className="holiday-indicator">
                           {hasWork ? (
-                            <span className="work-holiday-badge" title={workNames || `${dayHolidays.length} holiday(s)`}>
-                              {hasMultiple ? '⚠️' : '✓'}
-                            </span>
+                            <span className="work-holiday-badge">✓</span>
                           ) : (
-                            <span className="regular-holiday-badge" title={dayHolidays[0]?.name}>
+                            <span className="regular-holiday-badge">
                               ●
                             </span>
                           )}
@@ -108,6 +142,9 @@ const Calendar: React.FC<CalendarProps> = ({ month, holidays }) => {
           })}
         </tbody>
       </table>
+      <Tooltip visible={tooltipVisible} x={tooltipX} y={tooltipY}>
+        {tooltipContent}
+      </Tooltip>
     </div>
   );
 };

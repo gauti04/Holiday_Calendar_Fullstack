@@ -82,6 +82,19 @@
   color: #dc3545;
 }
 
+.hc-tooltip {
+  pointer-events: none;
+}
+
+.hc-tooltip .title {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.hc-tooltip .item {
+  margin: 2px 0;
+}
+
 /* Week styling */
 .week {
   transition: background-color 0.2s;

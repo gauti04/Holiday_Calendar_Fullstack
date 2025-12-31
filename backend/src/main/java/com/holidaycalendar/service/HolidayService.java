@@ -131,13 +131,27 @@ public class HolidayService {
                                 holiday.setCreatedAt(LocalDate.now());
                                 holidayRepository.save(holiday);
 
-                                Holiday holidayNew = new Holiday();
-                                holidayNew.setName(name + "mocked");
-                                holidayNew.setDate(date);
-                                holidayNew.setType(holidayType == Holiday.HolidayType.WORK ? Holiday.HolidayType.REGULAR : Holiday.HolidayType.WORK);
-                                holidayNew.setCountryCode(countryCode.toUpperCase());
-                                holidayNew.setCreatedAt(LocalDate.now());
-                                holidayRepository.save(holidayNew);
+                                if(holidayType == Holiday.HolidayType.WORK && date.getMonthValue() == 1) {
+                                    // also create a REGULAR holiday with "mocked" suffix for testing
+                                    Holiday holidayNew = new Holiday();
+                                    holidayNew.setName(name + "mocked");
+                                    
+                                    holidayNew.setDate(date);
+                                    holidayNew.setType(Holiday.HolidayType.REGULAR);
+                                    holidayNew.setCountryCode(countryCode.toUpperCase());
+                                    holidayNew.setCreatedAt(LocalDate.now());
+                                    holidayRepository.save(holidayNew);
+
+                                    // Also create another WORK holiday with next day for testing
+                                    Holiday holidayNextDay = new Holiday();
+                                    holidayNextDay.setName(name + "next day");      
+                                    holidayNextDay.setDate(date.plusDays(1));
+                                    holidayNextDay.setType(Holiday.HolidayType.WORK);
+                                    holidayNextDay.setCountryCode(countryCode.toUpperCase());
+                                    holidayNextDay.setCreatedAt(LocalDate.now());
+                                    holidayRepository.save(holidayNextDay);
+                                }
+
                             }
                         }
                     });
