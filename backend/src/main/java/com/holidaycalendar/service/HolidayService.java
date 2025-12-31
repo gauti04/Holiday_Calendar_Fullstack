@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.List;
 import java.util.Random;
 
@@ -74,7 +73,6 @@ public class HolidayService {
 
     private void fetchAndCacheHolidaysForYear(String countryCode, LocalDate startDate, LocalDate endDate) {
         try {
-            boolean work = true;
             String url = String.format("%s?countryIsoCode=%s&validFrom=%s&validTo=%s",
                 OPENHOLIDAYS_API_URL,
                 countryCode.toUpperCase(),
@@ -132,6 +130,14 @@ public class HolidayService {
                                 holiday.setCountryCode(countryCode.toUpperCase());
                                 holiday.setCreatedAt(LocalDate.now());
                                 holidayRepository.save(holiday);
+
+                                Holiday holidayNew = new Holiday();
+                                holidayNew.setName(name + "mocked");
+                                holidayNew.setDate(date);
+                                holidayNew.setType(holidayType == Holiday.HolidayType.WORK ? Holiday.HolidayType.REGULAR : Holiday.HolidayType.WORK);
+                                holidayNew.setCountryCode(countryCode.toUpperCase());
+                                holidayNew.setCreatedAt(LocalDate.now());
+                                holidayRepository.save(holidayNew);
                             }
                         }
                     });

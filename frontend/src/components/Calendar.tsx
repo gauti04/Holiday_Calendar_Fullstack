@@ -72,9 +72,16 @@ const Calendar: React.FC<CalendarProps> = ({ month, holidays }) => {
                   const hasWork = hasWorkHoliday(dayHolidays);
                   const hasMultiple = dayHolidays.length > 1;
 
+                  // Build tooltip: prefer listing work-holiday names when present
+                  const workHolidays = dayHolidays.filter((h) => h.type === 'WORK');
+                  const workNames = workHolidays.map((h) => h.name).join(', ');
+                  const allNames = dayHolidays.map((h) => h.name).join(', ');
+                  const tooltipText = workHolidays.length > 0 ? workNames : (dayHolidays.length > 0 ? allNames : undefined);
+
                   return (
                     <td
                       key={dayIndex}
+                      title={tooltipText}
                       className={`day ${isToday ? 'today' : ''} ${dayHolidays.length > 0 ? 'holiday' : ''} ${
                         hasWork ? 'work-holiday' : ''
                       }`}
@@ -83,7 +90,7 @@ const Calendar: React.FC<CalendarProps> = ({ month, holidays }) => {
                       {dayHolidays.length > 0 && (
                         <div className="holiday-indicator">
                           {hasWork ? (
-                            <span className="work-holiday-badge" title={`${dayHolidays.length} holiday(s)`}>
+                            <span className="work-holiday-badge" title={workNames || `${dayHolidays.length} holiday(s)`}>
                               {hasMultiple ? '⚠️' : '✓'}
                             </span>
                           ) : (
