@@ -126,7 +126,9 @@ const Calendar: React.FC<CalendarProps> = ({ month, holidays }) => {
                       {dayHolidays.length > 0 && (
                         <div className="holiday-indicator">
                           {hasWork ? (
-                            <span className="work-holiday-badge">✓</span>
+                            <span className={`work-holiday-badge ${workHolidays.length > 1 ? 'multiple' : ''}`}>
+                              {workHolidays.length > 1 ? workHolidays.length : '✓'}
+                            </span>
                           ) : (
                             <span className="regular-holiday-badge">
                               ●

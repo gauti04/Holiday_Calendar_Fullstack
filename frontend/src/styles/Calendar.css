@@ -82,6 +82,19 @@
   color: #dc3545;
 }
 
+.work-holiday-badge.multiple {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+}
+
 .hc-tooltip {
   pointer-events: none;
 }
