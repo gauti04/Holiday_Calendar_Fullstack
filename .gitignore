@@ -1,0 +1,51 @@
+############################
+# General
+############################
+.DS_Store
+Thumbs.db
+*.log
+
+############################
+# VS Code
+############################
+.vscode/
+
+############################
+# IntelliJ IDEA
+############################
+.idea/
+*.iml
+out/
+
+############################
+# Backend (Spring Boot / Maven)
+############################
+backend/target/
+backend/*.jar
+backend/*.war
+backend/*.class
+
+############################
+# Frontend (React / Node)
+############################
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+############################
+# Environment / Secrets
+############################
+.env
+.env.*
+backend/application-*.properties
+frontend/.env
+frontend/.env.*
+
+############################
+# OS / Editor temp files
+############################
+*.swp
+*.swo
