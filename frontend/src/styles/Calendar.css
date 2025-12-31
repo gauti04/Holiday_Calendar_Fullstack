@@ -1,0 +1,118 @@
+.calendar {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendar h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.calendar table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.calendar th {
+  background-color: #f0f0f0;
+  padding: 10px;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #ddd;
+}
+
+.calendar td {
+  height: 80px;
+  border: 1px solid #eee;
+  padding: 8px;
+  position: relative;
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.calendar td:hover {
+  background-color: #f9f9f9;
+}
+
+.calendar td.empty-day {
+  background-color: #fafafa;
+  cursor: default;
+}
+
+.calendar td.day {
+  vertical-align: top;
+}
+
+.day-number {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.calendar td.today {
+  background-color: #fff3cd;
+  border: 2px solid #ffc107;
+}
+
+.calendar td.today .day-number {
+  color: #ff6b6b;
+  font-weight: 700;
+}
+
+.holiday-indicator {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.regular-holiday-badge {
+  font-size: 12px;
+  color: #28a745;
+}
+
+.work-holiday-badge {
+  font-size: 14px;
+  font-weight: bold;
+  color: #dc3545;
+}
+
+/* Week styling */
+.week {
+  transition: background-color 0.2s;
+}
+
+.week.week-with-work-holiday {
+  background-color: #fff5f5;
+}
+
+.week.week-with-work-holiday[data-work-count="1"] {
+  border-left: 3px solid #dc3545;
+}
+
+.week.week-with-work-holiday[data-work-count="2"],
+.week.week-with-work-holiday[data-work-count="3"],
+.week.week-with-work-holiday[data-work-count="4"],
+.week.week-with-work-holiday[data-work-count="5"],
+.week.week-with-work-holiday[data-work-count="6"],
+.week.week-with-work-holiday[data-work-count="7"] {
+  border-left: 4px solid #c82333;
+  background-color: #ffe0e0;
+}
+
+@media (max-width: 768px) {
+  .calendar td {
+    height: 60px;
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+
+  .day-number {
+    font-size: 0.9rem;
+  }
+}
